@@ -23,7 +23,8 @@ setup(
             'aruco_node = ros2_aruco.aruco_node:main',
             'aruco_raspicam2 = ros2_aruco.aruco_raspicam2:main',
             'aruco_usbcam = ros2_aruco.aruco_usbcam:main',
-            'aruco_generate_marker = ros2_aruco.aruco_generate_marker:main'
+            'aruco_generate_marker = ros2_aruco.aruco_generate_marker:main',
+            'img_compressed2raw = ros2_aruco.img_compressed2raw:main',
         ],
     },
 )
