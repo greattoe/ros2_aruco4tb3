@@ -16,6 +16,57 @@ ROS에서 AR마커를 인식하고, 마커와 카메라 사이의 위치관계�
 
 `ros2_aruco`패키지를 `ros2_ws/src`에서 `git clone`하여 빌드 시 에러가 발생하기도 하고, 터틀봇3의 라즈베리파이에 연결된 라즈베리파이 카메라를 마커 인식을 위한 영상 소스로 사용하기 위해서 몇가지 필요한 작업도 있어 필요한 코드를 추가, 수정한 버전을 만들었다. 이 수정 버전 사용법은 다음과 같다.
 
+`ros2_aruco`공식 버전에 추가된 사항
+
+터틀봇3의 라즈베리파이 카메라 구동 노드인 `raspicam2_node`를 구동하면 다음 토픽들이 발행된다.
+
+```
+
+/camera/image/camera_info
+/camera/image/compressed
+```
+
+
+
+
+
+
+
+- **1.`img_compressed2raw.py` 추가**
+
+  `ros2_aruco`패키지는 AR마커 인식을 위해 `image_raw`토픽을 구독해야 하므로 `/camera/image/compressed`토픽을 구독하여 `/camera/image/image_raw`토픽을 발행하는 `img_compressed2raw.py`노드를 추가함.
+
+- **2. `aruco_raspicam2.py` 추가**
+
+  `img_compressed2raw.py`실행 시 발행되는`/camera/image/image_raw`토픽을 구독하여 AR마커를 인식하는 `aruco_raspicam2.py` 노드 추가.
+
+  
+
+  **3. `raspicam2_node.launch.py` 추가**
+
+  `img_compressed2raw`, `aruco_raspicam2`, `rqt_image_view`를 한 번에 구동하는 `raspicam2_node.launch.py` 추가
+
+
+
+
+
+
+
+
+
+따라서 AR마커를 인식하려면 터틀봇3에서 
+
+```
+```
+
+
+
+
+
+
+
+
+
 `ros2_aruco`터틀봇3를 위한 수정 버전 소스코드 복제를 위한 임시 작업폴더 생성
 
 ```bash

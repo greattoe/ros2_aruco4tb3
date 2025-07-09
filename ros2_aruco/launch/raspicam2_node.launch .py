@@ -16,6 +16,6 @@ def generate_launch_description():
             executable='aruco_raspicam2',
             name='aruco_raspicam2',
             output='screen',
-        )
+        ),
     ])
 
