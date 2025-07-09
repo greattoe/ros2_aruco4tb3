@@ -14,56 +14,31 @@ ROS에서 AR마커를 인식하고, 마커와 카메라 사이의 위치관계�
 
 **`ros2_aruco`공식 배포처:** https://github.com/JMU-ROBOTICS-VIVA/ros2_aruco 
 
-`ros2_aruco`패키지를 `ros2_ws/src`에서 `git clone`하여 빌드 시 에러가 발생하기도 하고, 터틀봇3의 라즈베리파이에 연결된 라즈베리파이 카메라를 마커 인식을 위한 영상 소스로 사용하기 위해서 몇가지 필요한 작업도 있어 필요한 코드를 추가, 수정한 버전을 만들었다. 이 수정 버전 사용법은 다음과 같다.
-
-`ros2_aruco`공식 버전에 추가된 사항
-
-터틀봇3의 라즈베리파이 카메라 구동 노드인 `raspicam2_node`를 구동하면 다음 토픽들이 발행된다.
-
-```
-
-/camera/image/camera_info
-/camera/image/compressed
-```
+`ros2_aruco`패키지를 `ros2_ws/src`에서 `git clone`하여 빌드 시 에러가 발생하기도 하고, 터틀봇3의 라즈베리파이에 연결된 라즈베리파이 카메라를 마커 인식을 위한 영상 소스로 사용하기 위해서 몇가지 필요한 작업도 있어 필요한 코드를 추가, 수정한 버전을 만들었다.
 
 
 
+**`ros2_aruco`수정판 배포처:** https://github.com/greattoe/ros2_aruco4tb3 
+
+### 추가 및 수정된 기능
+
+#### 1.`img_compressed2raw.py` 추가
+
+`ros2_aruco`패키지는 AR마커 인식을 위해 `image_raw`토픽을 구독해야 하므로 `/camera/image/compressed`토픽을 구독하여 `/camera/image/image_raw`토픽을 발행하는 `img_compressed2raw.py`노드를 추가함.
 
 
 
+#### 2. `aruco_raspicam2.py` 추가
 
-- **1.`img_compressed2raw.py` 추가**
+`img_compressed2raw.py`실행 시 발행되는`/camera/image/image_raw`토픽을 구독하여 AR마커를 인식하는 `aruco_raspicam2.py` 노드 추가.
 
-  `ros2_aruco`패키지는 AR마커 인식을 위해 `image_raw`토픽을 구독해야 하므로 `/camera/image/compressed`토픽을 구독하여 `/camera/image/image_raw`토픽을 발행하는 `img_compressed2raw.py`노드를 추가함.
+#### 3. `raspicam2_node.launch.py` 추가
 
-- **2. `aruco_raspicam2.py` 추가**
-
-  `img_compressed2raw.py`실행 시 발행되는`/camera/image/image_raw`토픽을 구독하여 AR마커를 인식하는 `aruco_raspicam2.py` 노드 추가.
-
-  
-
-  **3. `raspicam2_node.launch.py` 추가**
-
-  `img_compressed2raw`, `aruco_raspicam2`, `rqt_image_view`를 한 번에 구동하는 `raspicam2_node.launch.py` 추가
+`img_compressed2raw`, `aruco_raspicam2`, `rqt_image_view`를 한 번에 구동하는 `raspicam2_node.launch.py` 추가
 
 
 
-
-
-
-
-
-
-따라서 AR마커를 인식하려면 터틀봇3에서 
-
-```
-```
-
-
-
-
-
-
+### 설치
 
 
 
@@ -144,15 +119,15 @@ source ~/robot_ws/local_seup.bash
 
 
 
-빌드 결과 테스트를 위해 다음 명령으로 마커생성 노드를 구동해보자. 생성될 마커의 id는 5, size는 200 pixel, 참조할 dictionary는 4X4_50
+빌드 결과 테스트를 위해 다음 명령으로 마커생성 노드를 구동해보자. 생성될 마커의 id는 5, size는 200 pixel, 참조할 dictionary는 5X5_100
 
 ```
-ros2 run ros2_aruco aruco_generate_marker --id 5 --size 300 --dictionary DICT_4X4_50
+ros2 run ros2_aruco aruco_generate_marker --id 5 --size 300 --dictionary DICT_5X5_100
 
 ```
 
 - `--id`: 생성할 마커 ID (예: 5)
-- `--size`: 출력 PNG 이미지의 한 변의 길이 (픽셀 단위, 예: 300 → 300x300 이미지)
+- `--size`: 출력 `.png` 이미지의 한 변의 길이 (픽셀 단위, 예: 300 → 300x300 이미지)
 - `--dictionary`: 마커를 생성할 때 사용할 ArUco 딕셔너리 이름
    (예: `DICT_4X4_50`, `DICT_5X5_100`, `DICT_6X6_250` 등)
 
